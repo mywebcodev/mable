@@ -6,32 +6,59 @@ import { NodeModel } from '../models/node.model';
 
 @Injectable()
 export class NodeService {
-
-  constructor() { }
+  constructor() {}
 
   getNode(): Observable<NodeModel> {
     const node = this.createNode('folder', 3);
     const childNode = this.createNode('folder', 3, node);
-    childNode.children?.push(this.createNode('folder', 3, childNode))
+    childNode.children?.push(this.createNode('folder', 3, childNode));
     node.children?.push(childNode);
 
     return of(node);
   }
 
-  private createNode(type: 'folder' | 'file', childrenCount: number, parent?: NodeModel): NodeModel {
+  deleteNode(node: NodeModel | null): void {
+    if (!node) {
+      return;
+    }
+
+    const parent = node.prev;
+
+    if (!parent) {
+      node = null;
+      return;
+    }
+
+    const index = parent.children?.findIndex((c) => c.id === node.id);
+
+    if (!isNaN(index)) {
+      parent.next = null;
+      parent.children?.splice(index, 1);
+    }
+  }
+
+  private createNode(
+    type: 'folder' | 'file',
+    childrenCount: number,
+    prev?: NodeModel
+  ): NodeModel {
     const node: NodeModel = {
       id: faker.database.mongodbObjectId(),
       type: type,
-      parent: parent,
-      children: []
+      prev: prev,
+      children: [],
     };
 
     if (node.type !== 'folder') {
-      node.name = faker.system.commonFileName();
+      node.name = faker.system.fileName();
       return node;
     }
 
     node.name = faker.system.fileType();
+
+    if (prev) {
+      prev.next = node;
+    }
 
     Array.from({ length: childrenCount }).forEach(() => {
       childrenCount -= 1;

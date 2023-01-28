@@ -1,7 +1,8 @@
 export class NodeModel {
   id!: string;
   type!: 'folder' | 'file' | 'unset' | null;
-  parent?: NodeModel;
+  prev?: NodeModel;
+  next?: NodeModel;
   name?: string;
   children?: NodeModel[];
 }

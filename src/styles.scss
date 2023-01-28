@@ -1,5 +1,6 @@
 @import '~normalize.css';
 
+$border-color: #a9a9a9;
 html {
   font-size: 10px;
   font-family: 'Roboto Mono', monospace;
@@ -9,4 +10,22 @@ html {
   list-style: none;
   margin-left: 0;
   padding-left: 0;
+}
+
+.btn-group {
+  &:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  button {
+    border: 1px solid $border-color;
+    cursor: pointer;
+    float: left;
+
+    &:not(:last-child) {
+      border-right: none;
+    }
+  }
 }

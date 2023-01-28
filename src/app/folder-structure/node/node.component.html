@@ -10,8 +10,24 @@
       </ng-container>
     </ng-container>
   </li>
+  <li *ngIf="!node.next">
+    <div class="btn-group">
+      <button class="add-node-btn">Folder</button>
+      <button class="add-node-btn">File</button>
+    </div>
+  </li>
 </ul>
 
 <ng-template #nodeTemplate let-nodeValue="nodeValue">
-  <div ngClass="{{nodeValue.type}}"><span class="node-name">{{nodeValue.name}}</span></div>
+  <div ngClass="{{nodeValue.type}}">
+    <div class="node-flex-container">
+      <span class="node-name">{{nodeValue.name}}</span>
+      <div class="node-btn-group">
+        <img class="add-node-btn" src="../../../assets/images/folder-structure/add-circle.svg" alt="">
+        <img class="add-node-btn" src="../../../assets/images/folder-structure/delete.svg" alt="" (click)="onDelete(nodeValue)">
+      </div>
+    </div>
+  </div>
 </ng-template>
+
+<ng-template></ng-template>

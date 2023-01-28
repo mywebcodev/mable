@@ -1,6 +1,6 @@
-$border-color: #a9a9a9;
 $default-space: 5px;
 $zero: 0;
+$border-color: #a9a9a9;
 
 ul {
   padding: $zero;
@@ -17,6 +17,7 @@ ul {
     padding-bottom: $default-space;
     padding-left: 20px;
     box-sizing: border-box;
+    cursor: pointer;
 
     &:not(.root):before {
       position: absolute;
@@ -25,7 +26,7 @@ ul {
       width: 12px;
       height: 2px;
       margin: auto;
-      content: '';
+      content: "";
       background-color: $border-color;
     }
 
@@ -36,7 +37,7 @@ ul {
       left: 6px;
       width: 2px;
       height: 100%;
-      content: '';
+      content: "";
       background-color: $border-color;
     }
 
@@ -53,6 +54,23 @@ ul {
 .folder,
 .file {
   line-height: initial;
+  border: 1px solid transparent;
+  padding: 4px;
+  display: flex;
+
+  &:hover {
+    border: 1px solid $border-color;
+
+    .node-flex-container {
+      .node-btn-group {
+        visibility: visible;
+
+        & button.add-note-btn {
+          cursor: pointer;
+        }
+      }
+    }
+  }
 
   &::before,
   &::before {
@@ -64,16 +82,32 @@ ul {
     margin-right: $default-space;
   }
 
-  .node-name {
-    vertical-align: top;
+  .node-flex-container {
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    .node-name {
+      vertical-align: top;
+    }
+    .node-btn-group {
+      padding: 0 .8rem;
+      display: flex;
+      gap: 1rem;
+      visibility: hidden;
+    }
   }
+
+.add-node-btn {
+  width: 25px;
+}
 }
 
 .folder::before {
-  content: url('../../../assets/images/folder-structure/folder-open-regular.svg');
+  content: url("../../../assets/images/folder-structure/folder-open-regular.svg");
 }
 
 .file::before {
-  content: '';
-  background-image: url('../../../assets/images/folder-structure/file-regular.svg');
+  content: "";
+  background-image: url("../../../assets/images/folder-structure/file-regular.svg");
 }
+
