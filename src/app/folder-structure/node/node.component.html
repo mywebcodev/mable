@@ -1,0 +1,17 @@
+<ul>
+  <li [class.root]="node.children?.length">
+    <ng-container *ngTemplateOutlet="nodeTemplate;context:{nodeValue: node}"></ng-container>
+  </li>
+  <li *ngFor="let child of node.children">
+    <ng-container [ngSwitch]="child.type">
+      <ng-container *ngSwitchCase="'folder'"><app-node [node]="child"></app-node></ng-container>
+      <ng-container *ngSwitchDefault>
+        <ng-container *ngTemplateOutlet="nodeTemplate;context:{nodeValue: child}"></ng-container>
+      </ng-container>
+    </ng-container>
+  </li>
+</ul>
+
+<ng-template #nodeTemplate let-nodeValue="nodeValue">
+  <div ngClass="{{nodeValue.type}}"><span class="node-name">{{nodeValue.name}}</span></div>
+</ng-template>

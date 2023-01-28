@@ -1,0 +1,79 @@
+$border-color: #a9a9a9;
+$default-space: 5px;
+$zero: 0;
+
+ul {
+  padding: $zero;
+  list-style: none;
+
+  .root {
+    padding: $zero;
+    margin: $zero;
+  }
+
+  li {
+    position: relative;
+    padding-top: $default-space;
+    padding-bottom: $default-space;
+    padding-left: 20px;
+    box-sizing: border-box;
+
+    &:not(.root):before {
+      position: absolute;
+      top: 15px;
+      left: 6px;
+      width: 12px;
+      height: 2px;
+      margin: auto;
+      content: '';
+      background-color: $border-color;
+    }
+
+    &:not(.root):after {
+      position: absolute;
+      top: $zero;
+      bottom: $zero;
+      left: 6px;
+      width: 2px;
+      height: 100%;
+      content: '';
+      background-color: $border-color;
+    }
+
+    &:first-child:after {
+      top: 10px;
+    }
+
+    &:last-child:after {
+      height: 15px;
+    }
+  }
+}
+
+.folder,
+.file {
+  line-height: initial;
+
+  &::before,
+  &::before {
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: $default-space;
+  }
+
+  .node-name {
+    vertical-align: top;
+  }
+}
+
+.folder::before {
+  content: url('../../../assets/images/folder-structure/folder-open-regular.svg');
+}
+
+.file::before {
+  content: '';
+  background-image: url('../../../assets/images/folder-structure/file-regular.svg');
+}
