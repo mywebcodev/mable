@@ -10,7 +10,7 @@
       </ng-container>
     </ng-container>
   </li>
-  <li *ngIf="!node.next">
+  <li *ngIf="canShowControls(node)">
     <div class="btn-group">
       <button class="add-node-btn">Folder</button>
       <button class="add-node-btn">File</button>

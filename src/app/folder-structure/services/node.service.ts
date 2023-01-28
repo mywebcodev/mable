@@ -1,74 +1,66 @@
 import { Injectable } from '@angular/core';
 import { faker } from '@faker-js/faker';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { NodeModel } from '../models/node.model';
 
 @Injectable()
 export class NodeService {
+  private rootNode$ = new BehaviorSubject(this.createFolder(3, null));
+
   constructor() {}
 
   getNode(): Observable<NodeModel> {
-    const node = this.createNode('folder', 3);
-    const childNode = this.createNode('folder', 3, node);
-    childNode.children?.push(this.createNode('folder', 3, childNode));
-    node.children?.push(childNode);
-
-    return of(node);
+    return this.rootNode$.asObservable();
   }
 
-  deleteNode(node: NodeModel | null): void {
+  deleteNode(node: NodeModel): void {
     if (!node) {
       return;
     }
 
-    const parent = node.prev;
-
-    if (!parent) {
-      node = null;
+    if (!node.parent) {
+      this.rootNode$.next(null);
       return;
     }
 
-    const index = parent.children?.findIndex((c) => c.id === node.id);
+    const parent = node.parent;
 
-    if (!isNaN(index)) {
-      parent.next = null;
-      parent.children?.splice(index, 1);
+    if (parent) {
+      const index = parent.children?.findIndex((c) => c.id === node.id);
+      if (!isNaN(index)) {
+        parent.children?.splice(index, 1);
+      }
     }
   }
 
-  private createNode(
-    type: 'folder' | 'file',
-    childrenCount: number,
-    prev?: NodeModel
+  private createFolder(
+    nestedFoldersCount: number,
+    parent: NodeModel
   ): NodeModel {
-    const node: NodeModel = {
-      id: faker.database.mongodbObjectId(),
-      type: type,
-      prev: prev,
-      children: [],
-    };
+    const node = this.createNode('folder', parent);
 
-    if (node.type !== 'folder') {
-      node.name = faker.system.fileName();
-      return node;
-    }
-
-    node.name = faker.system.fileType();
-
-    if (prev) {
-      prev.next = node;
-    }
-
-    Array.from({ length: childrenCount }).forEach(() => {
-      childrenCount -= 1;
-      node.children?.push(this.createNode('file', childrenCount, node));
+    Array.from({ length: 3 }).forEach(() => {
+      node.children?.push(this.createNode('file', node));
     });
-    // while (nestedFoldersCount !== 0) {
-    //   nestedFoldersCount -= 1;
 
-    //   node.children?.push(this.createNode('folder', nestedFoldersCount, node));
-    // }
+    if (nestedFoldersCount) {
+      nestedFoldersCount -= 1;
+      node.children.push(this.createFolder(nestedFoldersCount, node));
+    }
+
+    return node;
+  }
+
+  private createNode(type: 'folder' | 'file', parent: NodeModel): NodeModel {
+    const node: NodeModel = new NodeModel();
+
+    node.id = faker.database.mongodbObjectId();
+    node.type = type;
+    node.parent = parent;
+    node.children = [];
+    node.name =
+      type === 'folder' ? faker.system.fileType() : faker.system.fileName();
 
     return node;
   }

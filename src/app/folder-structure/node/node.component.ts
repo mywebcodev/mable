@@ -10,6 +10,7 @@ import { NodeService } from '../services/node.service';
 })
 export class NodeComponent {
   private _node!: NodeModel;
+
   @Input()
   get node(): NodeModel {
     return this._node;
@@ -20,6 +21,15 @@ export class NodeComponent {
 
   constructor(private nodeService: NodeService) {}
 
+  canShowControls(node: NodeModel): boolean {
+    const length = node.children?.length;
+
+    if (node.isFolder) {
+      return length ? !node.children?.at(length - 1)?.isFolder : true;
+    }
+
+    return false;
+  }
   onDelete(node: NodeModel) {
     this.nodeService.deleteNode(node);
   }
