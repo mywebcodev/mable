@@ -30,6 +30,12 @@ export class NodeComponent {
 
     return false;
   }
+
+  onCreate(type: 'folder' | 'file', node: NodeModel) {
+    const parent = node?.isFolder || !node?.parent ? node : node.parent;
+    this.nodeService.createNode('test', type, node.isFolder ? node : parent);
+  }
+
   onDelete(node: NodeModel) {
     this.nodeService.deleteNode(node);
   }

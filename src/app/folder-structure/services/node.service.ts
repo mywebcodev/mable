@@ -6,7 +6,7 @@ import { NodeModel } from '../models/node.model';
 
 @Injectable()
 export class NodeService {
-  private rootNode$ = new BehaviorSubject(this.createFolder(3, null));
+  private rootNode$ = new BehaviorSubject(this.createFolder(3, 3, null));
 
   constructor() {}
 
@@ -34,34 +34,45 @@ export class NodeService {
     }
   }
 
-  private createFolder(
-    nestedFoldersCount: number,
+  createNode(
+    name: string,
+    type: 'folder' | 'file',
     parent: NodeModel
   ): NodeModel {
-    const node = this.createNode('folder', parent);
-
-    Array.from({ length: 3 }).forEach(() => {
-      node.children?.push(this.createNode('file', node));
-    });
-
-    if (nestedFoldersCount) {
-      nestedFoldersCount -= 1;
-      node.children.push(this.createFolder(nestedFoldersCount, node));
-    }
-
-    return node;
-  }
-
-  private createNode(type: 'folder' | 'file', parent: NodeModel): NodeModel {
     const node: NodeModel = new NodeModel();
 
     node.id = faker.database.mongodbObjectId();
     node.type = type;
     node.parent = parent;
     node.children = [];
-    node.name =
-      type === 'folder' ? faker.system.fileType() : faker.system.fileName();
+    node.name = name;
+
+    if (parent?.type === 'folder') {
+      parent.children.push(node);
+    }
+    return node;
+  }
+
+  private createFolder(
+    nestedFoldersCount: number,
+    filesCount: number,
+    parent: NodeModel
+  ): NodeModel {
+    const node = this.createNode(faker.system.fileType(), 'folder', parent);
+
+    Array.from({ length: filesCount }).forEach(() => {
+      this.createFile(node);
+    });
+
+    if (nestedFoldersCount) {
+      nestedFoldersCount -= 1;
+      this.createFolder(nestedFoldersCount, filesCount, node);
+    }
 
     return node;
+  }
+
+  private createFile(parent: NodeModel): NodeModel {
+    return this.createNode(faker.system.fileName(), 'file', parent);
   }
 }
