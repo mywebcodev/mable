@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 
 import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
-import { NodeTreeComponent } from '../node-tree/node-tree.component';
 import { NodeService } from '../services/node.service';
 
 @Component({
@@ -20,9 +19,6 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
   readonly nodeType = NodeType;
   showCreateNodeControl: boolean;
   root$: Observable<NodeModel>;
-
-  @ViewChild(NodeTreeComponent, { static: false })
-  tree: NodeTreeComponent;
 
   constructor(private nodeService: NodeService) {}
   ngOnInit(): void {

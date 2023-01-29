@@ -19,10 +19,6 @@ export class NodeService implements OnDestroy {
     return this.rootNode$.asObservable();
   }
 
-  getRootNode(): NodeModel {
-    return this.rootNode$.value;
-  }
-
   deleteNode(node: NodeModel): void {
     if (!node) {
       return;
@@ -43,12 +39,10 @@ export class NodeService implements OnDestroy {
     }
   }
 
-  createTypedNode(
-    name: string,
-    type: NodeType,
-    parent: NodeModel
-  ): NodeModel {
-    return type === NodeType.Folder ? this.createFolder(name, parent) : this.createFile(name, parent);
+  createTypedNode(name: string, type: NodeType, parent: NodeModel): NodeModel {
+    return type === NodeType.Folder
+      ? this.createFolder(name, parent)
+      : this.createFile(name, parent);
   }
 
   createFolder(
@@ -69,7 +63,7 @@ export class NodeService implements OnDestroy {
         faker.system.fileType(),
         node,
         nestedFoldersCount,
-        filesCount,
+        filesCount
       );
     }
 

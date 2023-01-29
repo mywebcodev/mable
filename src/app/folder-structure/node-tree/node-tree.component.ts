@@ -11,30 +11,27 @@ import { NodeService } from '../services/node.service';
   styleUrls: ['./node-tree.component.scss'],
 })
 export class NodeTreeComponent {
-  private _node!: NodeModel;
+  private _root!: NodeModel;
 
   readonly nodeCreateType = NodeCreateType;
   readonly nodeType = NodeType;
   showAddNodeControl = false;
 
   @Input()
-  get node(): NodeModel {
-    return this._node;
+  get root(): NodeModel {
+    return this._root;
   }
-  set node(node: NodeModel) {
-    this._node = node;
+  set root(root: NodeModel) {
+    this._root = root;
   }
 
   constructor(private nodeService: NodeService) {}
 
   onCreate(node: NodeModel) {
-    const parent =
-      this.node?.isFolder || !this.node?.parent ? this.node : this.node.parent;
-
     this.nodeService.createTypedNode(
       node.name,
       node.type,
-      this.node.isFolder ? this.node : parent
+      this.root
     );
 
     this.showAddNodeControl = false;

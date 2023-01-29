@@ -1,11 +1,11 @@
-<ul *ngIf="node">
-  <li [class.root]="node.isFolder">
-    <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: node }"></ng-container>
+<ul *ngIf="root">
+  <li class="root">
+    <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: root }"></ng-container>
   </li>
-  <li *ngFor="let child of node.children">
+  <li *ngFor="let child of root.children">
     <ng-container [ngSwitch]="child.type">
       <ng-container *ngSwitchCase="nodeType.Folder">
-        <app-node-tree [node]="child"></app-node-tree>
+        <app-node-tree [root]="child"></app-node-tree>
       </ng-container>
       <ng-container *ngSwitchDefault>
         <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child }">
