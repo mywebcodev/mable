@@ -1,8 +1,0 @@
-<ng-container *ngIf="(node$ | async) as node; else empty">
-  <div class="tree">
-    <app-node [node]="node"></app-node>
-  </div>
-</ng-container>
-
-<ng-template #empty>
-</ng-template>

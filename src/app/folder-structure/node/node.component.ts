@@ -1,19 +1,30 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
-import { NodeService } from '../services/node.service';
 
 @Component({
   selector: 'app-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss'],
 })
-export class NodeComponent {
+export class AddNodeComponent {
   private _node!: NodeModel;
 
   nodeType = NodeType;
-  showAddNoteControl = false;
+
+  @Output()
+  cancel = new EventEmitter<void>();
+
+  @Output()
+  add = new EventEmitter<NodeModel>();
+
+  @Output()
+  delete = new EventEmitter<NodeModel>();
+
+  @Input()
+  showAddNoteControl: boolean;
 
   @Input()
   get node(): NodeModel {
@@ -22,31 +33,31 @@ export class NodeComponent {
   set node(node: NodeModel) {
     this._node = node;
   }
-
-  constructor(private nodeService: NodeService) {}
+  readonly addNodeInputControl = new FormControl(null, [Validators.required]);
 
   canShowControls(node: NodeModel): boolean {
     const length = node.children?.length;
 
     if (node.isFolder) {
-      return (length ? !node.children?.at(length - 1)?.isFolder : true);
+      return length ? !node.children?.at(length - 1)?.isFolder : true;
     }
 
     return false;
   }
 
-  onCreate(name: string) {
-    const parent =
-      this.node?.isFolder || !this.node?.parent ? this.node : this.node.parent;
-    this.nodeService.createNode(
-      name,
-      this.node.type,
-      this.node.isFolder ? this.node : parent
-    );
+  onSubmit() {
+    this.showAddNoteControl = false;
+    this.add.emit(new NodeModel());
   }
 
-  onDelete(node: NodeModel) {
-    this.nodeService.deleteNode(node);
+  onCancel() {
+    this.showAddNoteControl = false;
+    this.cancel.emit();
+  }
+
+  onDelete() {
+    this.showAddNoteControl = false;
+    this.delete.emit(this.node);
   }
 
   onShowAddNoteControl() {

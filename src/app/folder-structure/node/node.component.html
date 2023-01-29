@@ -1,52 +1,46 @@
-<ul>
-  <li [class.root]="node.children?.length">
-    <ng-container
-      *ngTemplateOutlet="nodeTemplate; context: { nodeValue: node }"
-    ></ng-container>
-  </li>
-  <li *ngFor="let child of node.children">
-    <ng-container [ngSwitch]="child.type">
-      <ng-container *ngSwitchCase="nodeType.Folder">
-        <app-node [node]="child"></app-node>
-      </ng-container>
-      <ng-container *ngSwitchDefault>
-        <ng-container
-          *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child }">
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </li>
-  <li *ngIf="canShowControls(node)">
-    <ng-container [ngSwitch]="showAddNoteControl">
-      <ng-container *ngSwitchCase="true">
-        <div class="card">
-          <app-add-node [style.width.%]="100" [showAddNoteControl]="showAddNoteControl" [node]="node" (add)="onCreate($event)" (delete)="onDelete($event)"></app-add-node>
-        </div>
-      </ng-container>
-      <ng-container *ngSwitchDefault>
-        <div class="btn-group">
-          <button
-            type="button"
-            class="add-node-btn"
-            (click)="onShowAddNoteControl()"
-          >
-            Folder
-          </button>
-          <button
-            type="button"
-            class="add-node-btn"
-            (click)="onShowAddNoteControl()"
-          >
-            File
-          </button>
-        </div>
-      </ng-container>
-    </ng-container>
-  </li>
-</ul>
+<div ngClass="{{ node.type }}">
+  <div
+    *ngIf="!showAddNoteControl"
+    class="node-flex-container"
+  >
+    <span class="node-name">{{ node.name }}</span>
+    <div class="node-btn-group">
+      <button
+        class="img-node-btn"
+        (click)="onShowAddNoteControl()"
+      >
+        <img
+          src="../../../assets/images/folder-structure/add-circle.svg"
+        />
+      </button>
+      <button class="img-node-btn" (click)="onDelete()">
+        <img
+          src="../../../assets/images/folder-structure/delete.svg"
+        />
+      </button>
+    </div>
+  </div>
+</div>
 
-<ng-template #nodeTemplate let-nodeValue="nodeValue">
-  <div class="card">
-    <app-add-node [style.width.%]="100" [node]="nodeValue" (add)="onCreate($event)" (delete)="onDelete($event)"></app-add-node>
+<ng-template #addNodeControlTemplate>
+  <div class="node-flex-container">
+    <input
+      class="add-node-input"
+      type="text"
+      autofocus
+      [formControl]="addNodeInputControl"
+    />
+    <div class="node-btn-group">
+      <button
+        class="img-node-btn"
+        [disabled]="addNodeInputControl.invalid"
+        (click)="onSubmit()"
+      >
+        <img src="../../../assets/images/folder-structure/check-box.svg" />
+      </button>
+      <button class="img-node-btn" (click)="onCancel()">
+        <img src="../../../assets/images/folder-structure/close-square.svg" />
+      </button>
+    </div>
   </div>
 </ng-template>

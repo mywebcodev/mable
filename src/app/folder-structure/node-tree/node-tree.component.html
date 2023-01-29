@@ -1,0 +1,48 @@
+<ul>
+  <li [class.root]="node.children?.length">
+    <ng-container
+      *ngTemplateOutlet="nodeTemplate; context: { nodeValue: node }"
+    ></ng-container>
+  </li>
+  <li *ngFor="let child of node.children">
+    <ng-container [ngSwitch]="child.type">
+      <ng-container *ngSwitchCase="nodeType.Folder">
+        <app-node-tree [node]="child"></app-node-tree>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <ng-container
+          *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child }"
+        >
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </li>
+  <li *ngIf="canShowControls(node)">
+    <div class="btn-group">
+      <button
+        type="button"
+        class="add-node-btn"
+        (click)="onShowAddNodeControl()"
+      >
+        Folder
+      </button>
+      <button
+        type="button"
+        class="add-node-btn"
+        (click)="onShowAddNodeControl()"
+      >
+        File
+      </button>
+    </div>
+  </li>
+</ul>
+
+<ng-template #nodeTemplate let-nodeValue="nodeValue">
+  <div class="card">
+    <app-node
+      [style.width.%]="100"
+      [node]="nodeValue"
+      (delete)="onDelete($event)"
+    ></app-node>
+  </div>
+</ng-template>

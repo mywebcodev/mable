@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { StructureComponent } from './structure/structure.component';
+
+import { NodeTreeContainerComponent } from './node-tree-container/node-tree-container.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: StructureComponent
-  }
+    component: NodeTreeContainerComponent,
+  },
 ];
 
 @NgModule({

@@ -1,59 +1,5 @@
-$default-space: 5px;
 $zero: 0;
 $border-color: #a9a9a9;
-
-ul {
-  padding: $zero;
-  list-style: none;
-
-  .root {
-    padding: $zero;
-    margin: $zero;
-  }
-
-  li {
-    position: relative;
-    padding-top: $default-space;
-    padding-bottom: $default-space;
-    padding-left: 20px;
-    box-sizing: border-box;
-    cursor: pointer;
-
-    &:not(.root):before {
-      position: absolute;
-      top: 15px;
-      left: 6px;
-      width: 12px;
-      height: 2px;
-      margin: auto;
-      content: "";
-      background-color: $border-color;
-    }
-
-    &:not(.root):after {
-      position: absolute;
-      top: $zero;
-      bottom: $zero;
-      left: 6px;
-      width: 2px;
-      height: 100%;
-      content: "";
-      background-color: $border-color;
-    }
-
-    &:first-child:after {
-      top: 10px;
-    }
-
-    &:last-child:after {
-      height: 15px;
-    }
-
-    .card {
-      height: 4rem;
-    }
-  }
-}
 
 .folder,
 .file {
@@ -129,4 +75,3 @@ ul {
   content: "";
   background-image: url("../../../assets/images/folder-structure/file.svg");
 }
-

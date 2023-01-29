@@ -4,12 +4,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { NodeService } from '../services/node.service';
 
 @Component({
-  selector: 'app-structure',
-  templateUrl: './structure.component.html',
-  styleUrls: ['./structure.component.scss'],
+  selector: 'app-node-tree-container',
+  templateUrl: './node-tree-container.component.html',
+  styleUrls: ['./node-tree-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StructureComponent implements OnDestroy {
+export class NodeTreeContainerComponent implements OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   node$ = this.nodeService.getNode().pipe(takeUntil(this.ngUnsubscribe));
