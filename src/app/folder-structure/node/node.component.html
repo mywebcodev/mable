@@ -4,7 +4,7 @@
   </li>
   <li *ngFor="let child of node.children">
     <ng-container [ngSwitch]="child.type">
-      <ng-container *ngSwitchCase="'folder'"><app-node [node]="child"></app-node></ng-container>
+      <ng-container *ngSwitchCase="nodeType.Folder"><app-node [node]="child"></app-node></ng-container>
       <ng-container *ngSwitchDefault>
         <ng-container *ngTemplateOutlet="nodeTemplate;context:{nodeValue: child}"></ng-container>
       </ng-container>
@@ -12,14 +12,14 @@
   </li>
   <li *ngIf="canShowControls(node)">
     <div class="btn-group">
-      <button type="button" class="add-node-btn" (click)="onCreate('folder', node)">Folder</button>
-      <button type="button" class="add-node-btn" (click)="onCreate('file', node)">File</button>
+      <button type="button" class="add-node-btn" (click)="onCreate(nodeType.Folder, node)">Folder</button>
+      <button type="button" class="add-node-btn" (click)="onCreate(nodeType.File, node)">File</button>
     </div>
   </li>
 </ul>
 
 <ng-template #nodeTemplate let-nodeValue="nodeValue">
-  <div ngClass="{{nodeValue.type}}">
+  <div class="card" ngClass="{{nodeValue.type}}">
     <div class="node-flex-container">
       <span class="node-name">{{nodeValue.name}}</span>
       <div class="node-btn-group">

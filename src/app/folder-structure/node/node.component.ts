@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
 import { NodeService } from '../services/node.service';
 
@@ -10,6 +11,8 @@ import { NodeService } from '../services/node.service';
 })
 export class NodeComponent {
   private _node!: NodeModel;
+
+  nodeType = NodeType;
 
   @Input()
   get node(): NodeModel {
@@ -31,7 +34,7 @@ export class NodeComponent {
     return false;
   }
 
-  onCreate(type: 'folder' | 'file', node: NodeModel) {
+  onCreate(type: NodeType, node: NodeModel) {
     const parent = node?.isFolder || !node?.parent ? node : node.parent;
     this.nodeService.createNode('test', type, node.isFolder ? node : parent);
   }
