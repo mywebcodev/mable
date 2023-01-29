@@ -9,7 +9,7 @@ import { NodeModel } from '../models/node.model';
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss'],
 })
-export class AddNodeComponent {
+export class NodeComponent {
   private _node!: NodeModel;
 
   nodeType = NodeType;
@@ -45,9 +45,9 @@ export class AddNodeComponent {
     return false;
   }
 
-  onSubmit() {
+  onSubmit(node: NodeModel) {
     this.showAddNoteControl = false;
-    this.add.emit(new NodeModel());
+    this.add.emit(node);
   }
 
   onCancel() {
