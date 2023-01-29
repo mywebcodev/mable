@@ -29,15 +29,20 @@ export class NodeComponent {
     const length = node.children?.length;
 
     if (node.isFolder) {
-      return length ? !node.children?.at(length - 1)?.isFolder : true;
+      return (length ? !node.children?.at(length - 1)?.isFolder : true);
     }
 
     return false;
   }
 
-  onCreate(type: NodeType, node: NodeModel) {
-    const parent = node?.isFolder || !node?.parent ? node : node.parent;
-    this.nodeService.createNode('test', type, node.isFolder ? node : parent);
+  onCreate(name: string) {
+    const parent =
+      this.node?.isFolder || !this.node?.parent ? this.node : this.node.parent;
+    this.nodeService.createNode(
+      name,
+      this.node.type,
+      this.node.isFolder ? this.node : parent
+    );
   }
 
   onDelete(node: NodeModel) {
