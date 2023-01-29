@@ -12,7 +12,7 @@ import { NodeModel } from '../models/node.model';
 })
 export class AddNodeComponent {
   private _type!: NodeType;
-  private _mode!: NodeCreateType;
+  private _mode = NodeCreateType.Display;
 
   readonly addNodeInputControl = new FormControl(null, [Validators.required]);
   readonly nodeCreateType = NodeCreateType;

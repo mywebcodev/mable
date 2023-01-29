@@ -15,7 +15,7 @@ export class NodeTreeComponent {
 
   readonly nodeCreateType = NodeCreateType;
   readonly nodeType = NodeType;
-  showAddNodeControlMode = NodeCreateType.Display;
+  showAddNodeControl = false;
 
   @Input()
   get node(): NodeModel {
@@ -27,29 +27,21 @@ export class NodeTreeComponent {
 
   constructor(private nodeService: NodeService) {}
 
-  canShowAddNodeControls(node: NodeModel): boolean {
-    if (!node) {
-      return true;
-    }
-
-    const length = node.children?.length;
-
-    if (node.isFolder) {
-      return length ? !node.children?.at(length - 1)?.isFolder : true;
-    }
-
-    return false;
-  }
-
   onCreate(node: NodeModel) {
     const parent =
       this.node?.isFolder || !this.node?.parent ? this.node : this.node.parent;
 
-    this.nodeService.createNode(
+    this.nodeService.createTypedNode(
       node.name,
       node.type,
       this.node.isFolder ? this.node : parent
     );
+
+    this.showAddNodeControl = false;
+  }
+
+  onShowAddNodeControl() {
+    this.showAddNodeControl = true;
   }
 
   onDelete(node: NodeModel) {
@@ -57,6 +49,6 @@ export class NodeTreeComponent {
   }
 
   onCancel() {
-    this.showAddNodeControlMode = NodeCreateType.Display;
+    this.showAddNodeControl = false;
   }
 }

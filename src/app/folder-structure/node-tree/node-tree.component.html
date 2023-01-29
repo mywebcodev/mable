@@ -1,5 +1,5 @@
 <ul *ngIf="node">
-  <li [class.root]="node.children?.length">
+  <li [class.root]="node.isFolder">
     <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: node }"></ng-container>
   </li>
   <li *ngFor="let child of node.children">
@@ -13,12 +13,11 @@
       </ng-container>
     </ng-container>
   </li>
-
-  <li *ngIf="canShowAddNodeControls(node)">
-    <app-add-node #treeAddNodeControls [style.width.%]="100" [type]="nodeType.Folder" [mode]="showAddNodeControlMode" (submit)="onCreate($event)" (cancel)="onCancel()"></app-add-node>
+  <li *ngIf="showAddNodeControl">
+    <app-add-node class="app-node" [type]="nodeType.Folder" [mode]="nodeCreateType.Display" (submit)="onCreate($event)" (cancel)="onCancel()"></app-add-node>
   </li>
 </ul>
 
 <ng-template #nodeTemplate let-nodeValue="nodeValue">
-  <app-node [style.width.%]="100" [node]="nodeValue" (submit)="onCreate($event)" (delete)="onDelete($event)"></app-node>
+  <app-node class="app-node" [node]="nodeValue" (submit)="onShowAddNodeControl()" (delete)="onDelete($event)"></app-node>
 </ng-template>

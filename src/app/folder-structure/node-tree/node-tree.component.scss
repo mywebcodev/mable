@@ -5,7 +5,7 @@ $border-color: #a9a9a9;
 ul {
   padding: $zero;
   list-style: none;
-
+  margin-bottom: 0;
   .root {
     padding: $zero;
     margin: $zero;
@@ -41,7 +41,7 @@ ul {
       background-color: $border-color;
     }
 
-    &:first-child:after {
+    &:not(.root):first-child:after {
       top: 10px;
     }
 
@@ -51,6 +51,12 @@ ul {
 
     .card {
       height: 4rem;
+    }
+
+    .app-node {
+      margin-top: -5px;
+      width: 100%;
+      display: inline-block;
     }
   }
 }

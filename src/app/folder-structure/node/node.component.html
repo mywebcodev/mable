@@ -1,10 +1,10 @@
-<div *ngIf="!showAddNoteControl; else addNodeControlTemplate" class="card">
+<div class="card">
   <div ngClass="{{ node?.type }}">
 
     <div class="node-flex-container">
       <span class="node-name">{{ node?.name }}</span>
       <div class="node-btn-group">
-        <button class="img-node-btn" (click)="onShowAddNoteControl()">
+        <button [hidden]="node.type === nodeType.File" class="img-node-btn" (click)="onSubmit()">
           <img src="../../../assets/images/folder-structure/add-circle.svg" />
         </button>
         <button class="img-node-btn" (click)="onDelete()">
@@ -14,7 +14,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #addNodeControlTemplate>
-  <app-add-node [type]="node.type" (submit)="onSubmit($event)" (cancel)="onCancel()"></app-add-node>
-</ng-template>

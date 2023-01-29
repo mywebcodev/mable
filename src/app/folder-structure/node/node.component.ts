@@ -18,13 +18,10 @@ export class NodeComponent {
   cancel = new EventEmitter<void>();
 
   @Output()
-  submit = new EventEmitter<NodeModel>();
+  submit = new EventEmitter<void>();
 
   @Output()
   delete = new EventEmitter<NodeModel>();
-
-  @Input()
-  showAddNoteControl: boolean;
 
   @Input()
   get node(): NodeModel {
@@ -45,22 +42,15 @@ export class NodeComponent {
     return false;
   }
 
-  onSubmit(node: NodeModel) {
-    this.showAddNoteControl = false;
-    this.submit.emit(node);
+  onSubmit() {
+    this.submit.emit();
   }
 
   onCancel() {
-    this.showAddNoteControl = false;
     this.cancel.emit();
   }
 
   onDelete() {
-    this.showAddNoteControl = false;
     this.delete.emit(this.node);
-  }
-
-  onShowAddNoteControl() {
-    this.showAddNoteControl = true;
   }
 }

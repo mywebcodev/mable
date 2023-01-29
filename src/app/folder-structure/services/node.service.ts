@@ -15,8 +15,12 @@ export class NodeService implements OnDestroy {
     this.rootNode$.complete();
   }
 
-  getRootNode(): Observable<NodeModel> {
+  getRootNode$(): Observable<NodeModel> {
     return this.rootNode$.asObservable();
+  }
+
+  getRootNode(): NodeModel {
+    return this.rootNode$.value;
   }
 
   deleteNode(node: NodeModel): void {
@@ -39,18 +43,52 @@ export class NodeService implements OnDestroy {
     }
   }
 
-  createRootFolder(
+  createTypedNode(
     name: string,
-    nestedFoldersCount: number,
-    filesCount: number
+    type: NodeType,
+    parent: NodeModel
   ): NodeModel {
-    const root = this.createFolder(name, nestedFoldersCount, filesCount, null);
-    this.rootNode$.next(root);
-
-    return root;
+    return type === NodeType.Folder ? this.createFolder(name, parent) : this.createFile(name, parent);
   }
 
-  createNode(name: string, type: NodeType, parent: NodeModel): NodeModel {
+  createFolder(
+    name: string,
+    parent: NodeModel,
+    nestedFoldersCount?: number,
+    filesCount?: number
+  ): NodeModel {
+    const node = this.createNode(name, NodeType.Folder, parent);
+
+    Array.from({ length: filesCount }).forEach(() => {
+      this.createFile(faker.system.fileName(), node);
+    });
+
+    if (nestedFoldersCount) {
+      nestedFoldersCount -= 1;
+      this.createFolder(
+        faker.system.fileType(),
+        node,
+        nestedFoldersCount,
+        filesCount,
+      );
+    }
+
+    if (parent == null) {
+      this.rootNode$.next(node);
+    }
+
+    return node;
+  }
+
+  private createFile(name: string, parent: NodeModel): NodeModel {
+    return this.createNode(name, NodeType.File, parent);
+  }
+
+  private createNode(
+    name: string,
+    type: NodeType,
+    parent: NodeModel
+  ): NodeModel {
     const node: NodeModel = new NodeModel();
 
     node.id = faker.database.mongodbObjectId();
@@ -63,34 +101,5 @@ export class NodeService implements OnDestroy {
       parent.children.push(node);
     }
     return node;
-  }
-
-  private createFolder(
-    name: string,
-    nestedFoldersCount: number,
-    filesCount: number,
-    parent: NodeModel
-  ): NodeModel {
-    const node = this.createNode(name, NodeType.Folder, parent);
-
-    Array.from({ length: filesCount }).forEach(() => {
-      this.createFile(node);
-    });
-
-    if (nestedFoldersCount) {
-      nestedFoldersCount -= 1;
-      this.createFolder(
-        faker.system.fileType(),
-        nestedFoldersCount,
-        filesCount,
-        node
-      );
-    }
-
-    return node;
-  }
-
-  private createFile(parent: NodeModel): NodeModel {
-    return this.createNode(faker.system.fileName(), NodeType.File, parent);
   }
 }

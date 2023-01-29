@@ -21,15 +21,15 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
   showCreateNodeControl: boolean;
   root$: Observable<NodeModel>;
 
-  @ViewChild(NodeTreeComponent, {static: false})
+  @ViewChild(NodeTreeComponent, { static: false })
   tree: NodeTreeComponent;
-
 
   constructor(private nodeService: NodeService) {}
   ngOnInit(): void {
-    this.root$ = this.nodeService.getRootNode().pipe(tap(n => this._root = n), takeUntil(this.ngUnsubscribe));
-    this.nodeService.createRootFolder('root', 3, 3);
-
+    this.root$ = this.nodeService.getRootNode$().pipe(
+      tap((n) => (this._root = n)),
+      takeUntil(this.ngUnsubscribe)
+    );
   }
 
   ngOnDestroy(): void {
@@ -37,11 +37,13 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
   }
 
   onCreateFolder(node: NodeModel) {
-    if(this._root) {
-      this.nodeService.createNode(node.name, node.type, this._root);
+    if (!this._root) {
+      this.nodeService.createFolder(node.name, null, 3, 3);
     } else {
-      this.createRootFolder();
+      this.nodeService.createTypedNode(node.name, NodeType.Folder, this._root);
     }
+
+    this.onHideCreateNodeControl();
   }
 
   onShowCreateNodeControl() {
@@ -50,9 +52,5 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
 
   onHideCreateNodeControl() {
     this.showCreateNodeControl = false;
-  }
-
-  private createRootFolder() {
-    this.nodeService.createRootFolder('root', 0, 0);
   }
 }
