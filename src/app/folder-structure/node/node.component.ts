@@ -18,7 +18,7 @@ export class NodeComponent {
   cancel = new EventEmitter<void>();
 
   @Output()
-  add = new EventEmitter<NodeModel>();
+  submit = new EventEmitter<NodeModel>();
 
   @Output()
   delete = new EventEmitter<NodeModel>();
@@ -47,7 +47,7 @@ export class NodeComponent {
 
   onSubmit(node: NodeModel) {
     this.showAddNoteControl = false;
-    this.add.emit(node);
+    this.submit.emit(node);
   }
 
   onCancel() {

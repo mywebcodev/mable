@@ -1,24 +1,20 @@
-<div
-  *ngIf="!showAddNoteControl; else addNodeControlTemplate"
-  ngClass="{{ node.type }}"
->
-  <div class="node-flex-container">
-    <span class="node-name">{{ node.name }}</span>
-    <div class="node-btn-group">
-      <button class="img-node-btn" (click)="onShowAddNoteControl()">
-        <img src="../../../assets/images/folder-structure/add-circle.svg" />
-      </button>
-      <button class="img-node-btn" (click)="onDelete()">
-        <img src="../../../assets/images/folder-structure/delete.svg" />
-      </button>
+<div *ngIf="!showAddNoteControl; else addNodeControlTemplate" class="card">
+  <div ngClass="{{ node?.type }}">
+
+    <div class="node-flex-container">
+      <span class="node-name">{{ node?.name }}</span>
+      <div class="node-btn-group">
+        <button class="img-node-btn" (click)="onShowAddNoteControl()">
+          <img src="../../../assets/images/folder-structure/add-circle.svg" />
+        </button>
+        <button class="img-node-btn" (click)="onDelete()">
+          <img src="../../../assets/images/folder-structure/delete.svg" />
+        </button>
+      </div>
     </div>
   </div>
 </div>
 
 <ng-template #addNodeControlTemplate>
-  <app-add-node
-    [type]="node.type"
-    (submit)="onSubmit($event)"
-    (cancel)="onCancel()"
-  ></app-add-node>
+  <app-add-node [type]="node.type" (submit)="onSubmit($event)" (cancel)="onCancel()"></app-add-node>
 </ng-template>

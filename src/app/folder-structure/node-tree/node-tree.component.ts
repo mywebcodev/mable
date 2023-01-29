@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
 import { NodeService } from '../services/node.service';
@@ -12,8 +13,9 @@ import { NodeService } from '../services/node.service';
 export class NodeTreeComponent {
   private _node!: NodeModel;
 
-  nodeType = NodeType;
-  showAddNodeControl = false;
+  readonly nodeCreateType = NodeCreateType;
+  readonly nodeType = NodeType;
+  showAddNodeControlMode = NodeCreateType.Display;
 
   @Input()
   get node(): NodeModel {
@@ -25,7 +27,11 @@ export class NodeTreeComponent {
 
   constructor(private nodeService: NodeService) {}
 
-  canShowControls(node: NodeModel): boolean {
+  canShowAddNodeControls(node: NodeModel): boolean {
+    if (!node) {
+      return true;
+    }
+
     const length = node.children?.length;
 
     if (node.isFolder) {
@@ -35,12 +41,13 @@ export class NodeTreeComponent {
     return false;
   }
 
-  onCreate(name: string) {
+  onCreate(node: NodeModel) {
     const parent =
       this.node?.isFolder || !this.node?.parent ? this.node : this.node.parent;
+
     this.nodeService.createNode(
-      name,
-      this.node.type,
+      node.name,
+      node.type,
       this.node.isFolder ? this.node : parent
     );
   }
@@ -49,7 +56,7 @@ export class NodeTreeComponent {
     this.nodeService.deleteNode(node);
   }
 
-  onShowAddNodeControl() {
-    this.showAddNodeControl = true;
+  onCancel() {
+    this.showAddNodeControlMode = NodeCreateType.Display;
   }
 }

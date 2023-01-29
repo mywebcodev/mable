@@ -7,7 +7,7 @@ import { NodeModel } from '../models/node.model';
 
 @Injectable()
 export class NodeService implements OnDestroy {
-  private rootNode$ = new BehaviorSubject(this.createFolder(3, 3, null));
+  private rootNode$ = new BehaviorSubject(null);
 
   constructor() {}
 
@@ -15,7 +15,7 @@ export class NodeService implements OnDestroy {
     this.rootNode$.complete();
   }
 
-  getNode(): Observable<NodeModel> {
+  getRootNode(): Observable<NodeModel> {
     return this.rootNode$.asObservable();
   }
 
@@ -39,6 +39,17 @@ export class NodeService implements OnDestroy {
     }
   }
 
+  createRootFolder(
+    name: string,
+    nestedFoldersCount: number,
+    filesCount: number
+  ): NodeModel {
+    const root = this.createFolder(name, nestedFoldersCount, filesCount, null);
+    this.rootNode$.next(root);
+
+    return root;
+  }
+
   createNode(name: string, type: NodeType, parent: NodeModel): NodeModel {
     const node: NodeModel = new NodeModel();
 
@@ -55,15 +66,12 @@ export class NodeService implements OnDestroy {
   }
 
   private createFolder(
+    name: string,
     nestedFoldersCount: number,
     filesCount: number,
     parent: NodeModel
   ): NodeModel {
-    const node = this.createNode(
-      faker.system.fileType(),
-      NodeType.Folder,
-      parent
-    );
+    const node = this.createNode(name, NodeType.Folder, parent);
 
     Array.from({ length: filesCount }).forEach(() => {
       this.createFile(node);
@@ -71,7 +79,12 @@ export class NodeService implements OnDestroy {
 
     if (nestedFoldersCount) {
       nestedFoldersCount -= 1;
-      this.createFolder(nestedFoldersCount, filesCount, node);
+      this.createFolder(
+        faker.system.fileType(),
+        nestedFoldersCount,
+        filesCount,
+        node
+      );
     }
 
     return node;

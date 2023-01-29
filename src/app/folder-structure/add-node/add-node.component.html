@@ -1,22 +1,42 @@
-<div ngClass="{{ type }}">
-  <div class="node-flex-container">
-    <input
-      class="add-node-input"
-      type="text"
-      autofocus
-      [formControl]="addNodeInputControl"
-    />
-    <div class="node-btn-group">
-      <button
-        class="img-node-btn"
-        [disabled]="addNodeInputControl.invalid"
-        (click)="onSubmit()"
-      >
-        <img src="../../../assets/images/folder-structure/check-box.svg" />
+<ng-container [ngSwitch]="mode">
+  <ng-container *ngSwitchCase="nodeCreateType.Display">
+    <div class="btn-group">
+      <button type="button" class="add-node-btn" (click)="onCreateFolder()">
+        Folder
       </button>
-      <button class="img-node-btn" (click)="onCancel()">
-        <img src="../../../assets/images/folder-structure/close-square.svg" />
+      <button type="button" class="add-node-btn" (click)="onCreateFile()">
+        File
       </button>
     </div>
-  </div>
-</div>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <div class="card">
+      <div ngClass="{{ type }}">
+        <div class="node-flex-container">
+          <input
+            class="add-node-input"
+            type="text"
+            autofocus
+            [formControl]="addNodeInputControl"
+          />
+          <div class="node-btn-group">
+            <button
+              class="img-node-btn"
+              [disabled]="addNodeInputControl.invalid"
+              (click)="onSubmit()"
+            >
+              <img
+                src="../../../assets/images/folder-structure/check-box.svg"
+              />
+            </button>
+            <button class="img-node-btn" (click)="onCancel()">
+              <img
+                src="../../../assets/images/folder-structure/close-square.svg"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

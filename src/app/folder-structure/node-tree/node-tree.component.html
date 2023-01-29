@@ -1,8 +1,6 @@
-<ul>
+<ul *ngIf="node">
   <li [class.root]="node.children?.length">
-    <ng-container
-      *ngTemplateOutlet="nodeTemplate; context: { nodeValue: node }"
-    ></ng-container>
+    <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: node }"></ng-container>
   </li>
   <li *ngFor="let child of node.children">
     <ng-container [ngSwitch]="child.type">
@@ -10,39 +8,17 @@
         <app-node-tree [node]="child"></app-node-tree>
       </ng-container>
       <ng-container *ngSwitchDefault>
-        <ng-container
-          *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child }"
-        >
+        <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child }">
         </ng-container>
       </ng-container>
     </ng-container>
   </li>
-  <li *ngIf="canShowControls(node)">
-    <div class="btn-group">
-      <button
-        type="button"
-        class="add-node-btn"
-        (click)="onShowAddNodeControl()"
-      >
-        Folder
-      </button>
-      <button
-        type="button"
-        class="add-node-btn"
-        (click)="onShowAddNodeControl()"
-      >
-        File
-      </button>
-    </div>
+
+  <li *ngIf="canShowAddNodeControls(node)">
+    <app-add-node #treeAddNodeControls [style.width.%]="100" [type]="nodeType.Folder" [mode]="showAddNodeControlMode" (submit)="onCreate($event)" (cancel)="onCancel()"></app-add-node>
   </li>
 </ul>
 
 <ng-template #nodeTemplate let-nodeValue="nodeValue">
-  <div class="card">
-    <app-node
-      [style.width.%]="100"
-      [node]="nodeValue"
-      (delete)="onDelete($event)"
-    ></app-node>
-  </div>
+  <app-node [style.width.%]="100" [node]="nodeValue" (submit)="onCreate($event)" (delete)="onDelete($event)"></app-node>
 </ng-template>
