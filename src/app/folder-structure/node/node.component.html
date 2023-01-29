@@ -20,14 +20,16 @@
 
 <ng-template #nodeTemplate let-nodeValue="nodeValue">
   <div class="card" ngClass="{{nodeValue.type}}">
-    <div class="node-flex-container">
+    <div *ngIf="!showAddNoteControl; else addNoteTemplate" class="node-flex-container">
       <span class="node-name">{{nodeValue.name}}</span>
       <div class="node-btn-group">
-        <img class="add-node-btn" src="../../../assets/images/folder-structure/add-circle.svg" alt="">
-        <img class="add-node-btn" src="../../../assets/images/folder-structure/delete.svg" alt="" (click)="onDelete(nodeValue)">
+        <img class="add-node-btn" src="../../../assets/images/folder-structure/add-circle.svg" (click)="onShowAddNoteControl()">
+        <img class="add-node-btn" src="../../../assets/images/folder-structure/delete.svg" (click)="onDelete(nodeValue)">
       </div>
     </div>
   </div>
 </ng-template>
 
-<ng-template></ng-template>
+<ng-template #addNoteTemplate>
+  <app-add-note></app-add-note>
+</ng-template>

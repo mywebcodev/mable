@@ -13,6 +13,7 @@ export class NodeComponent {
   private _node!: NodeModel;
 
   nodeType = NodeType;
+  showAddNoteControl = false;
 
   @Input()
   get node(): NodeModel {
@@ -41,5 +42,9 @@ export class NodeComponent {
 
   onDelete(node: NodeModel) {
     this.nodeService.deleteNode(node);
+  }
+
+  onShowAddNoteControl() {
+    this.showAddNoteControl = true;
   }
 }

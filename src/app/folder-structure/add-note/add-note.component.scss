@@ -1,0 +1,111 @@
+$default-space: 5px;
+$zero: 0;
+$border-color: #a9a9a9;
+
+ul {
+  padding: $zero;
+  list-style: none;
+
+  .root {
+    padding: $zero;
+    margin: $zero;
+  }
+
+  li {
+    position: relative;
+    padding-top: $default-space;
+    padding-bottom: $default-space;
+    padding-left: 20px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:not(.root):before {
+      position: absolute;
+      top: 15px;
+      left: 6px;
+      width: 12px;
+      height: 2px;
+      margin: auto;
+      content: "";
+      background-color: $border-color;
+    }
+
+    &:not(.root):after {
+      position: absolute;
+      top: $zero;
+      bottom: $zero;
+      left: 6px;
+      width: 2px;
+      height: 100%;
+      content: "";
+      background-color: $border-color;
+    }
+
+    &:first-child:after {
+      top: 10px;
+    }
+
+    &:last-child:after {
+      height: 15px;
+    }
+  }
+}
+
+.folder,
+.file {
+  line-height: initial;
+  padding: 4px;
+  display: flex;
+
+  &:hover {
+    .node-flex-container {
+      .node-btn-group {
+        visibility: visible;
+
+        & button.add-note-btn {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  &::before,
+  &::before {
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: $default-space;
+  }
+
+  .node-flex-container {
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    .node-name {
+      vertical-align: top;
+    }
+    .node-btn-group {
+      padding: 0 8px;
+      display: flex;
+      gap: 10px;
+      visibility: hidden;
+      transition: 0.05s linear;
+    }
+  }
+
+.add-node-btn {
+  width: 25px;
+}
+}
+
+.folder::before {
+  content: url("../../../assets/images/folder-structure/folder-open-regular.svg");
+}
+
+.file::before {
+  content: "";
+  background-image: url("../../../assets/images/folder-structure/file-regular.svg");
+}
+
