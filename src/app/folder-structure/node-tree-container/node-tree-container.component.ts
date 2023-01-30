@@ -37,6 +37,7 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
     if (!this._root) {
       this.nodeService.createTestTree(data.name, null, 3, 3);
     } else {
+      data.parent = this._root;
       this.nodeService.createTypedNode(data);
     }
 

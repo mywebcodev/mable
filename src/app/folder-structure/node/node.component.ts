@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
+import { INodeDeleteData } from '../models/i-node-delete.data';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
 
@@ -10,8 +11,6 @@ import { NodeModel } from '../models/node.model';
   styleUrls: ['./node.component.scss'],
 })
 export class NodeComponent {
-  private _node!: NodeModel;
-
   nodeType = NodeType;
 
   @Output()
@@ -21,17 +20,21 @@ export class NodeComponent {
   submit = new EventEmitter<void>();
 
   @Output()
-  delete = new EventEmitter<NodeModel>();
+  delete = new EventEmitter<INodeDeleteData>();
 
   @Input()
-  get node(): NodeModel {
-    return this._node;
-  }
-  set node(node: NodeModel) {
-    this._node = node;
-  }
+  node!: NodeModel;
+
+  @Input()
+  parent?: NodeModel;
+
   readonly addNodeInputControl = new FormControl(null, [Validators.required]);
 
+  /**
+   * Check if node controls should be displayed
+   * @param node NodeModel - the node to check
+   * @returns boolean - true if controls should be displayed, false otherwise
+   */
   canShowControls(node: NodeModel): boolean {
     const length = node.children?.length;
 
@@ -42,15 +45,21 @@ export class NodeComponent {
     return false;
   }
 
-  onSubmit() {
+  /** Emit the submit event */
+  onSubmit(): void {
     this.submit.emit();
   }
 
-  onCancel() {
+  /** Emit the cancel event */
+  onCancel(): void {
     this.cancel.emit();
   }
 
-  onDelete() {
-    this.delete.emit(this.node);
+  /** Emit the delete event with node delete data */
+  onDelete(): void {
+    this.delete.emit({
+      node: this.node,
+      parent: this.parent,
+    });
   }
 }

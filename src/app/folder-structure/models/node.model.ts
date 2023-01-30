@@ -2,8 +2,8 @@ import { NodeType } from './node-type.enum';
 
 export class NodeModel {
   id!: string;
+  parentId: string;
   type!: NodeType;
-  parent?: NodeModel;
   name?: string;
   children?: NodeModel[];
 

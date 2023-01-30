@@ -1,14 +1,14 @@
 <ul *ngIf="root">
   <li class="root">
-    <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: root }"></ng-container>
+    <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: root, nodeParent: parent }"></ng-container>
   </li>
   <li *ngFor="let child of root.children">
     <ng-container [ngSwitch]="child.type">
       <ng-container *ngSwitchCase="nodeType.Folder">
-        <app-node-tree [root]="child"></app-node-tree>
+        <app-node-tree [root]="child" [parent]="root"></app-node-tree>
       </ng-container>
       <ng-container *ngSwitchDefault>
-        <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child }">
+        <ng-container *ngTemplateOutlet="nodeTemplate; context: { nodeValue: child, nodeParent: root }">
         </ng-container>
       </ng-container>
     </ng-container>
@@ -17,7 +17,6 @@
     <app-add-node class="app-node" [type]="nodeType.Folder" [mode]="nodeCreateType.Display" (submit)="onCreate($event)" (cancel)="onCancel()"></app-add-node>
   </li>
 </ul>
-
-<ng-template #nodeTemplate let-nodeValue="nodeValue">
-  <app-node class="app-node" [node]="nodeValue" (submit)="onShowAddNodeControl()" (delete)="onDelete($event)"></app-node>
+<ng-template #nodeTemplate let-nodeValue="nodeValue" let-nodeParent="nodeParent">
+  <app-node class="app-node" [node]="nodeValue" [parent]="nodeParent" (submit)="onShowAddNodeControl()" (delete)="onDelete($event)"></app-node>
 </ng-template>

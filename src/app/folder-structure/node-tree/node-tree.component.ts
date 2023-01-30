@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { INodeCreateData } from '../models/i-node-create.data';
+import { INodeDeleteData } from '../models/i-node-delete.data';
 import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
@@ -19,6 +20,9 @@ export class NodeTreeComponent {
   showAddNodeControl = false;
 
   @Input()
+  parent: NodeModel;
+
+  @Input()
   get root(): NodeModel {
     return this._root;
   }
@@ -28,21 +32,21 @@ export class NodeTreeComponent {
 
   constructor(private nodeService: NodeService) {}
 
-  onCreate(data: INodeCreateData) {
+  onCreate(data: INodeCreateData): void {
     data.parent = this.root;
     this.nodeService.createTypedNode(data);
     this.showAddNodeControl = false;
   }
 
-  onShowAddNodeControl() {
+  onShowAddNodeControl(): void {
     this.showAddNodeControl = true;
   }
 
-  onDelete(node: NodeModel) {
-    this.nodeService.deleteNode(node);
+  onDelete(data: INodeDeleteData): void {
+    this.nodeService.deleteNode(data);
   }
 
-  onCancel() {
+  onCancel(): void {
     this.showAddNodeControl = false;
   }
 }

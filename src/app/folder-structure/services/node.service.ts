@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { INodeCreateData } from '../models/i-node-create.data';
+import { INodeDeleteData } from '../models/i-node-delete.data';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
 
@@ -49,17 +50,18 @@ export class NodeService implements OnDestroy {
     return node;
   }
 
-  deleteNode(node: NodeModel): void {
-    if (!node) {
+  deleteNode(data: INodeDeleteData): void {
+    const node = data?.node;
+    const parent = data?.parent;
+
+    if (!data?.node) {
       return;
     }
 
-    if (!node.parent) {
+    if (!parent) {
       this.rootNode$.next(null);
       return;
     }
-
-    const parent = node.parent;
 
     if (parent) {
       const index = parent.children?.findIndex((c) => c.id === node.id);
@@ -97,7 +99,6 @@ export class NodeService implements OnDestroy {
 
     node.id = faker.database.mongodbObjectId();
     node.type = type;
-    node.parent = parent;
     node.children = [];
     node.name = name;
 

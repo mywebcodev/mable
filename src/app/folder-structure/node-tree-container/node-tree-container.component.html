@@ -1,5 +1,8 @@
-<div class="tree">
+<section class="tree">
   <button (click)="onShowCreateNodeControl()">Add folder to root</button>
   <app-node-tree [root]="root$ | async"></app-node-tree>
   <app-add-node *ngIf="showCreateNodeControl" #treeAddNodeControls [type]="nodeType.Folder" [mode]="nodeCreateType.Create" (submit)="onCreateNode($event)" (cancel)="onHideCreateNodeControl()"></app-add-node>
+</section>
+<div>
+  <textarea>{{root$ | async | json}}</textarea>
 </div>

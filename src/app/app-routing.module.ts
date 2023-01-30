@@ -3,18 +3,29 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 
-const routes: Routes = [{
-  path: '',
-  component: AppComponent,
-},
-{
-  path: 'folder-structure',
-  loadChildren: () => import('./folder-structure/folder-structure.module').then(m => m.FolderStructureModule)
-}
+const routes: Routes = [
+  {
+    path: '',
+    component: AppComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'folder-structure',
+        pathMatch: 'full',
+      },
+      {
+        path: 'folder-structure',
+        loadChildren: () =>
+          import('./folder-structure/folder-structure.module').then(
+            (m) => m.FolderStructureModule
+          ),
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
