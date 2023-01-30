@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
 import { INodeCreateData } from '../models/i-node-create.data';
-import { INodeDeleteData } from '../models/i-node-delete.data';
 import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
@@ -13,22 +12,12 @@ import { NodeService } from '../services/node.service';
   styleUrls: ['./node-tree.component.scss'],
 })
 export class NodeTreeComponent {
-  private _root!: NodeModel;
-
   readonly nodeCreateType = NodeCreateType;
   readonly nodeType = NodeType;
   showAddNodeControl = false;
 
   @Input()
-  parent: NodeModel;
-
-  @Input()
-  get root(): NodeModel {
-    return this._root;
-  }
-  set root(root: NodeModel) {
-    this._root = root;
-  }
+  root: NodeModel;
 
   constructor(private nodeService: NodeService) {}
 
@@ -51,10 +40,10 @@ export class NodeTreeComponent {
 
   /**
    * Deletes a node with the specified data
-   * @param data The data for the node to be deleted
+   * @param data The node to be deleted
    */
-  onDelete(data: INodeDeleteData): void {
-    this.nodeService.deleteNode(data);
+  onDelete(node: NodeModel): void {
+    this.nodeService.deleteNode(node);
   }
 
   /**

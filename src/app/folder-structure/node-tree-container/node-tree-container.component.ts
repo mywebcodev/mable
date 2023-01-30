@@ -42,18 +42,15 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
 
   /**
    * Handle the creation of a new node.
-   * If the root node doesn't exist yet, create a test tree.
-   * Otherwise, create the new node as a child of the root node.
+   * create the new node as a child of the root node.
    * @param data - The data required to create the node.
    */
   onCreateNode(data: INodeCreateData) {
-    if (!this._root) {
-      this.nodeService.createTestTree(data.name, null, 3, 3);
-    } else {
+    if (this._root) {
       data.parent = this._root;
-      this.nodeService.createTypedNode(data);
     }
 
+    this.nodeService.createTypedNode(data);
     this.onHideCreateNodeControl();
   }
 

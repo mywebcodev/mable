@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { INodeDeleteData } from '../models/i-node-delete.data';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
 
@@ -20,13 +19,10 @@ export class NodeComponent {
   submit = new EventEmitter<void>();
 
   @Output()
-  delete = new EventEmitter<INodeDeleteData>();
+  delete = new EventEmitter<NodeModel>();
 
   @Input()
   node!: NodeModel;
-
-  @Input()
-  parent?: NodeModel;
 
   readonly addNodeInputControl = new FormControl(null, [Validators.required]);
 
@@ -57,9 +53,6 @@ export class NodeComponent {
 
   /** Emit the delete event with node delete data */
   onDelete(): void {
-    this.delete.emit({
-      node: this.node,
-      parent: this.parent,
-    });
+    this.delete.emit(this.node);
   }
 }
