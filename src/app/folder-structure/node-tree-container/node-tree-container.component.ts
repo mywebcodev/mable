@@ -22,6 +22,10 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
   root$: Observable<NodeModel>;
 
   constructor(private nodeService: NodeService) {}
+
+  /**
+   * Initialize the component by getting the root node from the `NodeService`.
+   */
   ngOnInit(): void {
     this.root$ = this.nodeService.getRootNode$().pipe(
       tap((n) => (this._root = n)),
@@ -29,10 +33,19 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Cancel subscriptions on component destruction.
+   */
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
   }
 
+  /**
+   * Handle the creation of a new node.
+   * If the root node doesn't exist yet, create a test tree.
+   * Otherwise, create the new node as a child of the root node.
+   * @param data - The data required to create the node.
+   */
   onCreateNode(data: INodeCreateData) {
     if (!this._root) {
       this.nodeService.createTestTree(data.name, null, 3, 3);
@@ -44,10 +57,16 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
     this.onHideCreateNodeControl();
   }
 
+  /**
+   * Show the create node form.
+   */
   onShowCreateNodeControl() {
     this.showCreateNodeControl = true;
   }
 
+  /**
+   * Hides the create node form.
+   */
   onHideCreateNodeControl() {
     this.showCreateNodeControl = false;
   }

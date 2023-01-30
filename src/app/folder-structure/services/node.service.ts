@@ -21,35 +21,6 @@ export class NodeService implements OnDestroy {
     return this.rootNode$.asObservable();
   }
 
-  createTestTree(
-    name: string,
-    parent: NodeModel,
-    nestedFoldersCount?: number,
-    filesCount?: number
-  ): NodeModel {
-    const node = this.createFolder(name, parent);
-
-    Array.from({ length: filesCount }).forEach(() => {
-      this.createFile(faker.system.fileName(), node);
-    });
-
-    if (nestedFoldersCount) {
-      nestedFoldersCount -= 1;
-      this.createTestTree(
-        faker.system.fileType(),
-        node,
-        nestedFoldersCount,
-        filesCount
-      );
-    }
-
-    if (parent == null) {
-      this.rootNode$.next(node);
-    }
-
-    return node;
-  }
-
   deleteNode(data: INodeDeleteData): void {
     const node = data?.node;
     const parent = data?.parent;
@@ -105,6 +76,35 @@ export class NodeService implements OnDestroy {
     if (parent?.isFolder) {
       parent.children.push(node);
     }
+    return node;
+  }
+
+  createTestTree(
+    name: string,
+    parent: NodeModel,
+    nestedFoldersCount?: number,
+    filesCount?: number
+  ): NodeModel {
+    const node = this.createFolder(name, parent);
+
+    Array.from({ length: filesCount }).forEach(() => {
+      this.createFile(faker.system.fileName(), node);
+    });
+
+    if (nestedFoldersCount) {
+      nestedFoldersCount -= 1;
+      this.createTestTree(
+        faker.system.fileType(),
+        node,
+        nestedFoldersCount,
+        filesCount
+      );
+    }
+
+    if (parent == null) {
+      this.rootNode$.next(node);
+    }
+
     return node;
   }
 }

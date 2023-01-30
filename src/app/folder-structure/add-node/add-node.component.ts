@@ -11,9 +11,6 @@ import { NodeType } from '../models/node-type.enum';
   styleUrls: ['./add-node.component.scss'],
 })
 export class AddNodeComponent {
-  private _type!: NodeType;
-  private _mode = NodeCreateType.Display;
-
   readonly addNodeInputControl = new FormControl(null, [Validators.required]);
   readonly nodeCreateType = NodeCreateType;
   readonly nodeType = NodeType;
@@ -25,23 +22,14 @@ export class AddNodeComponent {
   cancel = new EventEmitter<void>();
 
   @Input()
-  get type(): NodeType {
-    return this._type;
-  }
-
-  set type(type: NodeType) {
-    this._type = type;
-  }
+  type: NodeType;
 
   @Input()
-  get mode(): NodeCreateType {
-    return this._mode;
-  }
+  mode: NodeCreateType;
 
-  set mode(mode: NodeCreateType) {
-    this._mode = mode;
-  }
-
+  /**
+   * Handles submit event
+   */
   onSubmit() {
     this.submit.emit({
       name: this.addNodeInputControl.value,
@@ -49,16 +37,25 @@ export class AddNodeComponent {
     });
   }
 
+  /**
+   * Handles create file event
+   */
   onCreateFile() {
     this.type = NodeType.File;
     this.mode = NodeCreateType.Create;
   }
 
+  /**
+   * Handles create folder event
+   */
   onCreateFolder() {
     this.type = NodeType.Folder;
     this.mode = NodeCreateType.Create;
   }
 
+  /**
+   * Handles cancel event
+   */
   onCancel() {
     this.mode = NodeCreateType.Display;
     this.cancel.emit();

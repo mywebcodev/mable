@@ -32,20 +32,34 @@ export class NodeTreeComponent {
 
   constructor(private nodeService: NodeService) {}
 
+  /**
+   * Creates a new node with the specified data
+   * @param data The data for the new node
+   */
   onCreate(data: INodeCreateData): void {
     data.parent = this.root;
     this.nodeService.createTypedNode(data);
     this.showAddNodeControl = false;
   }
 
+  /**
+   * Shows the add node control
+   */
   onShowAddNodeControl(): void {
     this.showAddNodeControl = true;
   }
 
+  /**
+   * Deletes a node with the specified data
+   * @param data The data for the node to be deleted
+   */
   onDelete(data: INodeDeleteData): void {
     this.nodeService.deleteNode(data);
   }
 
+  /**
+   * Cancels node creation
+   */
   onCancel(): void {
     this.showAddNodeControl = false;
   }
