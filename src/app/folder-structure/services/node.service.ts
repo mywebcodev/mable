@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { faker } from '@faker-js/faker';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { INodeCreateData } from '../models/i-node-create.data';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
 
@@ -17,6 +18,35 @@ export class NodeService implements OnDestroy {
 
   getRootNode$(): Observable<NodeModel> {
     return this.rootNode$.asObservable();
+  }
+
+  createTestTree(
+    name: string,
+    parent: NodeModel,
+    nestedFoldersCount?: number,
+    filesCount?: number
+  ): NodeModel {
+    const node = this.createFolder(name, parent);
+
+    Array.from({ length: filesCount }).forEach(() => {
+      this.createFile(faker.system.fileName(), node);
+    });
+
+    if (nestedFoldersCount) {
+      nestedFoldersCount -= 1;
+      this.createTestTree(
+        faker.system.fileType(),
+        node,
+        nestedFoldersCount,
+        filesCount
+      );
+    }
+
+    if (parent == null) {
+      this.rootNode$.next(node);
+    }
+
+    return node;
   }
 
   deleteNode(node: NodeModel): void {
@@ -39,34 +69,14 @@ export class NodeService implements OnDestroy {
     }
   }
 
-  createTypedNode(name: string, type: NodeType, parent: NodeModel): NodeModel {
-    return type === NodeType.Folder
-      ? this.createFolder(name, parent)
-      : this.createFile(name, parent);
+  createTypedNode(data: INodeCreateData): NodeModel {
+    return data.type === NodeType.Folder
+      ? this.createFolder(data.name, data.parent)
+      : this.createFile(data.name, data.parent);
   }
 
-  createFolder(
-    name: string,
-    parent: NodeModel,
-    nestedFoldersCount?: number,
-    filesCount?: number
-  ): NodeModel {
+  private createFolder(name: string, parent: NodeModel): NodeModel {
     const node = this.createNode(name, NodeType.Folder, parent);
-
-    Array.from({ length: filesCount }).forEach(() => {
-      this.createFile(faker.system.fileName(), node);
-    });
-
-    if (nestedFoldersCount) {
-      nestedFoldersCount -= 1;
-      this.createFolder(
-        faker.system.fileType(),
-        node,
-        nestedFoldersCount,
-        filesCount
-      );
-    }
-
     if (parent == null) {
       this.rootNode$.next(node);
     }

@@ -1,5 +1,5 @@
 <div class="tree">
   <button (click)="onShowCreateNodeControl()">Add folder to root</button>
   <app-node-tree [root]="root$ | async"></app-node-tree>
-  <app-add-node *ngIf="showCreateNodeControl" #treeAddNodeControls [type]="nodeType.Folder" [mode]="nodeCreateType.Create" (submit)="onCreateFolder($event)" (cancel)="onHideCreateNodeControl()"></app-add-node>
+  <app-add-node *ngIf="showCreateNodeControl" #treeAddNodeControls [type]="nodeType.Folder" [mode]="nodeCreateType.Create" (submit)="onCreateNode($event)" (cancel)="onHideCreateNodeControl()"></app-add-node>
 </div>

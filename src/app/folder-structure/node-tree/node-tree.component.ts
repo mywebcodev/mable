@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+import { INodeCreateData } from '../models/i-node-create.data';
 import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
@@ -27,13 +28,9 @@ export class NodeTreeComponent {
 
   constructor(private nodeService: NodeService) {}
 
-  onCreate(node: NodeModel) {
-    this.nodeService.createTypedNode(
-      node.name,
-      node.type,
-      this.root
-    );
-
+  onCreate(data: INodeCreateData) {
+    data.parent = this.root;
+    this.nodeService.createTypedNode(data);
     this.showAddNodeControl = false;
   }
 

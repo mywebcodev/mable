@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
+import { INodeCreateData } from '../models/i-node-create.data';
 import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
-import { NodeModel } from '../models/node.model';
 
 @Component({
   selector: 'app-add-node',
@@ -19,7 +19,7 @@ export class AddNodeComponent {
   readonly nodeType = NodeType;
 
   @Output()
-  submit = new EventEmitter<NodeModel>();
+  submit = new EventEmitter<INodeCreateData>();
 
   @Output()
   cancel = new EventEmitter<void>();
@@ -43,11 +43,10 @@ export class AddNodeComponent {
   }
 
   onSubmit() {
-    const node = new NodeModel();
-    node.type = this.type;
-    node.name = this.addNodeInputControl.value;
-
-    this.submit.emit(node);
+    this.submit.emit({
+      name: this.addNodeInputControl.value,
+      type: this.type
+    });
   }
 
   onCreateFile() {

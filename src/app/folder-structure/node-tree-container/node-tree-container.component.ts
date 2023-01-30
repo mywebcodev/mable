@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 
+import { INodeCreateData } from '../models/i-node-create.data';
 import { NodeCreateType } from '../models/node-create-type.enum';
 import { NodeType } from '../models/node-type.enum';
 import { NodeModel } from '../models/node.model';
@@ -32,11 +33,11 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
   }
 
-  onCreateFolder(node: NodeModel) {
+  onCreateNode(data: INodeCreateData) {
     if (!this._root) {
-      this.nodeService.createFolder(node.name, null, 3, 3);
+      this.nodeService.createTestTree(data.name, null, 3, 3);
     } else {
-      this.nodeService.createTypedNode(node.name, NodeType.Folder, this._root);
+      this.nodeService.createTypedNode(data);
     }
 
     this.onHideCreateNodeControl();
