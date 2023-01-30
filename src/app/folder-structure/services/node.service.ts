@@ -22,6 +22,9 @@ export class NodeService implements OnDestroy {
     return this._rootNode$.asObservable();
   }
 
+  /**
+   * Deletes the node
+   */
   deleteNode(node: NodeModel): void {
     if (!node) {
       return;
@@ -34,18 +37,23 @@ export class NodeService implements OnDestroy {
       return;
     }
 
+    // removes deleted child from the parent children collection
     if (parent) {
       const index = parent.children?.findIndex((c) => c.id === node.id);
       if (!isNaN(index)) {
         parent.children?.splice(index, 1);
       }
 
+      // removes deleted parent reference from the map
       if(node.isFolder) {
         this._parentMap.delete(node.id);
       }
     }
   }
 
+   /**
+   * Creates folder or file node
+   */
   createTypedNode(data: INodeCreateData): NodeModel {
     return data.type === NodeType.Folder
       ? this.createFolder(data.name, data.parent)
@@ -56,6 +64,7 @@ export class NodeService implements OnDestroy {
     const node = this.createNode(name, NodeType.Folder, parent);
     this._parentMap.set(node.id, node);
 
+    // if node can't have a parent then it is a root node
     if (parent == null) {
       this._rootNode$.next(node);
     }

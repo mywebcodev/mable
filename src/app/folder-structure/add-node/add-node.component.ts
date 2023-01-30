@@ -30,7 +30,7 @@ export class AddNodeComponent {
   /**
    * Handles submit event
    */
-  onSubmit() {
+  onSubmit(): void {
     this.submit.emit({
       name: this.addNodeInputControl.value,
       type: this.type
@@ -40,7 +40,7 @@ export class AddNodeComponent {
   /**
    * Handles create file event
    */
-  onCreateFile() {
+  onCreateFile(): void {
     this.type = NodeType.File;
     this.mode = NodeCreateType.Create;
   }
@@ -48,7 +48,7 @@ export class AddNodeComponent {
   /**
    * Handles create folder event
    */
-  onCreateFolder() {
+  onCreateFolder(): void {
     this.type = NodeType.Folder;
     this.mode = NodeCreateType.Create;
   }
@@ -56,7 +56,7 @@ export class AddNodeComponent {
   /**
    * Handles cancel event
    */
-  onCancel() {
+  onCancel(): void {
     this.mode = NodeCreateType.Display;
     this.cancel.emit();
   }

@@ -45,7 +45,7 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
    * create the new node as a child of the root node.
    * @param data - The data required to create the node.
    */
-  onCreateNode(data: INodeCreateData) {
+  onCreateNode(data: INodeCreateData): void {
     if (this._root) {
       data.parent = this._root;
     }
@@ -57,14 +57,14 @@ export class NodeTreeContainerComponent implements OnInit, OnDestroy {
   /**
    * Show the create node form.
    */
-  onShowCreateNodeControl() {
+  onShowCreateNodeControl(): void {
     this.showCreateNodeControl = true;
   }
 
   /**
    * Hides the create node form.
    */
-  onHideCreateNodeControl() {
+  onHideCreateNodeControl(): void {
     this.showCreateNodeControl = false;
   }
 }
